@@ -50,7 +50,11 @@ for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     on_attach = on_attach,
     capabilities = capabilities,
-  }
+    -- Disaple the lsp help text, but still shows markers
+    handlers = vim.diagnostic.config({
+        virtual_text = false,
+    })
+}
 end
 
 -- luasnip setup
