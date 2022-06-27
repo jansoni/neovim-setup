@@ -32,9 +32,20 @@ require('nvim-treesitter.configs').setup {
   }
 }
 
+
 require("luasnip.loaders.from_vscode").lazy_load()
 
 -- Framework snippets
 require("luasnip").filetype_extend("python", {"django"})
 
 
+require("nvim-lsp-installer").setup({
+    automatic_installation = false, -- automatically detect which servers to install (based on which servers are set up via lspconfig)
+    ui = {
+        icons = {
+            server_installed = "✓",
+            server_pending = "➜",
+            server_uninstalled = "✗"
+        }
+    }
+})

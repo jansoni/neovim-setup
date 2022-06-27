@@ -17,6 +17,7 @@ require('packer').startup(function()
   use 'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
   use 'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
   use 'L3MON4D3/LuaSnip' -- Snippets plugin
+  use 'williamboman/nvim-lsp-installer'
 end)
 
 -- Add additional capabilities supported by nvim-cmp
@@ -45,16 +46,21 @@ local on_attach = function(client, bufnr)
 end
 
 -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
-local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver' }
+local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver', 'gopls' }
 for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-    -- Disaple the lsp help text, but still shows markers
-    handlers = vim.diagnostic.config({
-        virtual_text = false,
-    })
-}
+    lspconfig[lsp].setup {
+        on_attach = on_attach,
+        capabilities = capabilities,
+      	handlers = vim.diagnostic.config(
+            vim.diagnostic.config({
+                virtual_text = { prefix = '●', -- Could be '■', '▎', 'x' },
+                severity_sort = true,
+                float = {
+                source = "always",  -- Or "if_many"
+          },
+        }
+    	}))
+    }
 end
 
 -- luasnip setup
